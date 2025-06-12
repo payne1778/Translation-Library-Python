@@ -49,7 +49,7 @@ def populate_translation_vars(
             f"variable_args={variable_args}"
         )
         raise Exception(
-            "FATAL: An error occurred while populating translation variables.\n" +
+            "FATAL: An error occurred while populating translation vars.\n" +
             "Check the following: " +
             f"language_name={language}, " +
             f"variable_name={variable}, " +
@@ -112,15 +112,17 @@ def print_translated_message(
             )
         elif not section and variable_args:
             raise KeyError(
-                f"Variable \"{variable}\" could not be found or the variable\'s " +
-                f"args: {variable_args} in {toml_path} could not be inserted. " +
+                f"Variable \"{variable}\" could not be found or the " +
+                f"variable\'s args: {variable_args} in {toml_path} could not " +
+                "be inserted. " +
                 "Please recheck language files, parameter inputs, and spelling."
             )
         else:
             raise KeyError(
-                f"Variable \"{variable}\" or section \"{section}\" could not be" +
-                f"found or the variable\'s args {variable_args} in {toml_path}" +
-                f"inserted. (Is \"{variable}\" under \"{section}\"?) " +
+                f"Variable \"{variable}\" or section \"{section}\" could not " +
+                f"be found or the variable\'s args {variable_args} in " +
+                f"{toml_path} could not be inserted. (Is \"{variable}\" " +
+                f"under \"{section}\"?) " +
                 "Please recheck language files, parameter inputs, and spelling."
             )
 
@@ -288,7 +290,7 @@ def main():
     )
     if not valid_paths:
         raise AssertionError(
-            "FATAL: Comprehensive path assertion failed. Please check paths: \n" +
+            "FATAL: Comprehensive path check failed. Please check paths: \n" +
             f"base_directory = \'{base_directory}\', " +
                 ("PASSED\n" if paths_tested[0] else "FAILED\n") +
             f"language_list_path = \'{language_list_path}\', " +
@@ -345,7 +347,7 @@ def main():
             help_handler()
         case _:
             raise ValueError(
-                f"FATAL: Could not determine the desired task: \"{selection}\". " +
+                f"FATAL: Could not determine desired task: \"{selection}\". " +
                 "(Did you spell it correctly and is it a valid command?) " +
                 "Please recheck this input or use help for more information"
             )
