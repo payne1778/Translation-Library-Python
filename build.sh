@@ -12,7 +12,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # 2. Install dependencies
-pip install pytest
+pip install pytest > /dev/null
 
 # 3. Put contents of the docs repo into a new folder named with $DOCS_REPO_NAME
 git subtree add --prefix="$DOCS_REPO_NAME/" "$DOCS_REPO_URL" "$COMMIT" --squash
