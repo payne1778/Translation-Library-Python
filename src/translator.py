@@ -1,8 +1,10 @@
-from pathlib import Path
-import tomllib
-import typing
-import sys
 import os
+import sys
+import typing
+from pathlib import Path
+
+import tomllib
+
 
 def get_toml_dict(toml_path: str) -> dict:
     """
@@ -18,8 +20,8 @@ def get_toml_dict(toml_path: str) -> dict:
 
 
 def populate_translation_vars(
-        args: list[str]
-    ) -> str and str and str and dict[str, str]:
+    args: list[str],
+) -> str and str and str and dict[str, str]:
     """
     Returns the populated string values of language, variable, section, and
     variable_args for later use in obtaining a translated message.
@@ -35,25 +37,25 @@ def populate_translation_vars(
     # Check the length of all args. If the argument is missing, set it to None
     language, variable, section, variable_args = ("", "", "", "")
     try:
-        language = args[2].lower() if len(args) != 0 else None
-        variable = args[3]         if len(args) != 0 else None
-        section = args[4]          if len(args) != 0 else None
-        variable_args = args[5:]   if len(args) != 0 else None
+        language = args[2].lower() if len(args) != 0 else ""
+        variable = args[3] if len(args) != 0 else ""
+        section = args[4] if len(args) != 0 else ""
+        variable_args = args[5:] if len(args) != 0 else [""]
     except Exception:
         raise IndexError(
-            "FATAL: Missing argument for one of the translation arguments.\n" +
-            "Check the following:" +
-            f"language_name={language}, " +
-            f"variable_name={variable}, " +
-            f"section_name={section}, " +
+            "FATAL: Missing argument for one of the translation arguments.\n"
+            "Check the following:"
+            f"language_name={language}, "
+            f"variable_name={variable}, "
+            f"section_name={section}, "
             f"variable_args={variable_args}"
         )
         raise Exception(
-            "FATAL: An error occurred while populating translation vars.\n" +
-            "Check the following: " +
-            f"language_name={language}, " +
-            f"variable_name={variable}, " +
-            f"section_name={section}, " +
+            "FATAL: An error occurred while populating translation vars.\n"
+            "Check the following: "
+            f"language_name={language}, "
+            f"variable_name={variable}, "
+            f"section_name={section}, "
             f"variable_args={variable_args}"
         )
 
@@ -61,17 +63,18 @@ def populate_translation_vars(
     variable_args = (
         # Example: "name=Blake", adds {"name": "Blake"} to the dictionary
         {k: v for k, v in (arg.split("=") for arg in variable_args)}
-        if variable_args else None
+        if variable_args
+        else None
     )
     return language, variable, section, variable_args
 
 
 def print_translated_message(
-        toml_path: str,
-        variable: str,
-        section: str = None,
-        variable_args: dict[str, object] = None
-    ) -> None:
+    toml_path: str,
+    variable: str,
+    section: str = "",
+    variable_args: dict[str, object] = {},
+) -> None:
     """
     Prints the translated message with the given arguments.
 
@@ -99,41 +102,41 @@ def print_translated_message(
     except KeyError:
         if not section and not variable_args:
             raise KeyError(
-                f"Variable \"{variable}\" in {toml_path} could not be found. " +
-                f"(Is \"{variable}\" under a section or not?) " +
-                "Please recheck language files, parameter inputs, and spelling."
+                f'Variable "{variable}" in {toml_path} could not be found. '
+                + f'(Is "{variable}" under a section or not?) '
+                + "Please recheck language files, parameter inputs, and spelling."
             )
         elif section and not variable_args:
             raise KeyError(
-                f"Section \"{section}\" or variable \"{variable}\" in " +
-                f"{toml_path} could not be found. (Is \"{variable}\" under "
-                f"\"{section}\"?) " +
+                f'Section "{section}" or variable "{variable}" in '
+                f'{toml_path} could not be found. (Is "{variable}" under '
+                f'"{section}"?) '
                 "Please recheck language files, parameter inputs, and spelling."
             )
         elif not section and variable_args:
             raise KeyError(
-                f"Variable \"{variable}\" could not be found or the " +
-                f"variable\'s args: {variable_args} in {toml_path} could not " +
-                "be inserted. " +
-                "Please recheck language files, parameter inputs, and spelling."
+                f'Variable "{variable}" could not be found or the '
+                + f"variable's args: {variable_args} in {toml_path} could not "
+                + "be inserted. "
+                + "Please recheck language files, parameter inputs, and spelling."
             )
         else:
             raise KeyError(
-                f"Variable \"{variable}\" or section \"{section}\" could not " +
-                f"be found or the variable\'s args {variable_args} in " +
-                f"{toml_path} could not be inserted. (Is \"{variable}\" " +
-                f"under \"{section}\"?) " +
-                "Please recheck language files, parameter inputs, and spelling."
+                f'Variable "{variable}" or section "{section}" could not '
+                + f"be found or the variable's args {variable_args} in "
+                + f'{toml_path} could not be inserted. (Is "{variable}" '
+                + f'under "{section}"?) '
+                + "Please recheck language files, parameter inputs, and spelling."
             )
 
 
 def print_translated_message_handler(
-        preferred_path: str,
-        default_path: str,
-        variable: str,
-        section: str,
-        variable_args: dict[str, object]
-    ) -> None:
+    preferred_path: str,
+    default_path: str,
+    variable: str,
+    section: str,
+    variable_args: dict[str, object],
+) -> None:
     """
     Attempts to first print out the translated message using a preferred
     language. If the preferred language file could not be found or loaded, the
@@ -149,18 +152,14 @@ def print_translated_message_handler(
     the message
     """
     try:
-        print_translated_message(
-            preferred_path, variable, section, variable_args
-        )
+        print_translated_message(preferred_path, variable, section, variable_args)
     except Exception as e1:
         print(
-            f"Could not get translation from: {preferred_path} due to {e1}. " +
-            f"Attempting to obtain translation from: {default_path}"
+            f"Could not get translation from: {preferred_path} due to {e1}. "
+            + f"Attempting to obtain translation from: {default_path}"
         )
         try:
-            print_translated_message(
-                default_path, variable, section, variable_args
-            )
+            print_translated_message(default_path, variable, section, variable_args)
         except Exception as e2:
             print(f"Could not get translation from: {default_path} due to {e2}")
             raise SystemError("FATAL: Translation files could not be loaded")
@@ -197,10 +196,9 @@ def is_supported_language(toml_path: str, language: str) -> bool:
     :param language: The name of the language to be checked
     :return: `True` if the language is supported, `False` otherwise
     """
-    return (
-        language.lower() in get_available_languages(toml_path) or
-        language in get_available_languages_anglicized(toml_path)
-    )
+    return language.lower() in get_available_languages(
+        toml_path
+    ) or language in get_available_languages_anglicized(toml_path)
 
 
 def are_valid_paths(*paths: str) -> list[bool] and bool:
@@ -221,11 +219,10 @@ def help_handler():
     Reads from this file's associated README. Replaces/removes markdown syntax
     in favor of command line friendly symbols and readability.
     """
-    with open("./src/Python/README.md", "r") as f:
+    with open("./src/README.md", "r") as f:
         file_as_string = f.read()
         file_as_string = (
-            file_as_string
-            .replace("```bash\n", "")
+            file_as_string.replace("```bash\n", "")
             .replace("```toml\n", "")
             .replace("```\n", "")
             .replace("###", "--->")
@@ -237,18 +234,14 @@ def help_handler():
 
 def main():
     # Initialize all commands as separate lists for easier maintainability
-    translation_commands = [
-        "get-translation", "translation", "translate"
-    ]
-    list_languages_commands = [
-        "get-available", "list", "list-available", "get-list"
-    ]
+    translation_commands = ["get-translation", "translation", "translate"]
+    list_languages_commands = ["get-available", "list", "list-available", "get-list"]
     list_languages_anglicized_commands = [
-        "get-anglicized-list", "list-anglicized", "anglicized-list"
+        "get-anglicized-list",
+        "list-anglicized",
+        "anglicized-list",
     ]
-    is_supported_language_commands = [
-        "is-supported", "is-available", "check-supported"
-    ]
+    is_supported_language_commands = ["is-supported", "is-available", "check-supported"]
 
     # Capture command line arguments and store desired task selection
     args = sys.argv
@@ -275,7 +268,8 @@ def main():
     # Use preferred language file if found, otherwise use default language file
     preferred_language_path = (
         os.path.join(base_directory, "lib", f"{language}.toml")
-        if translation_mode else default_language_path
+        if translation_mode
+        else default_language_path
     )
 
     ### CHECKS ###
@@ -286,35 +280,32 @@ def main():
         base_directory,
         language_list_path,
         default_language_path,
-        preferred_language_path
+        preferred_language_path,
     )
     if not valid_paths:
         raise AssertionError(
-            "FATAL: Comprehensive path check failed. Please check paths: \n" +
-            f"base_directory = \'{base_directory}\', " +
-                ("PASSED\n" if paths_tested[0] else "FAILED\n") +
-            f"language_list_path = \'{language_list_path}\', " +
-                ("PASSED\n" if paths_tested[1] else "FAILED\n") +
-            f"default_language_path = \'{default_language_path}\', " +
-                ("PASSED\n" if paths_tested[2] else "FAILED\n") +
-            f"preferred_language_path = \'{preferred_language_path}\', " +
-                ("PASSED\n" if paths_tested[3] else "FAILED\n")
+            "FATAL: Comprehensive path check failed. Please check paths: \n"
+            + f"base_directory = '{base_directory}', "
+            + ("PASSED\n" if paths_tested[0] else "FAILED\n")
+            + f"language_list_path = '{language_list_path}', "
+            + ("PASSED\n" if paths_tested[1] else "FAILED\n")
+            + f"default_language_path = '{default_language_path}', "
+            + ("PASSED\n" if paths_tested[2] else "FAILED\n")
+            + f"preferred_language_path = '{preferred_language_path}', "
+            + ("PASSED\n" if paths_tested[3] else "FAILED\n")
         )
 
     # Ensure that a language and desired variable to query for were given
     if (not language or not variable) and translation_mode:
         raise ValueError(
-            "FATAL: Language and/or variable argument(s) were not given. " +
-            f"Language=\"{language}\", Variable=\"{variable}\"."
+            "FATAL: Language and/or variable argument(s) were not given. "
+            f'Language="{language}", Variable="{variable}".'
         )
 
     # Ensure that the desired language is supported
-    if (
-        translation_mode and
-        not is_supported_language(language_list_path, language)
-    ):
+    if translation_mode and not is_supported_language(language_list_path, language):
         raise NotImplementedError(
-            f"FATAL: The language \"{language}\" is not supported. " +
+            f'FATAL: The language "{language}" is not supported. '
             "Corroborate your spelling with the relevant TOML file/entry."
         )
 
@@ -325,31 +316,24 @@ def main():
                 default_language_path,
                 variable,
                 section,
-                variable_args
+                variable_args,
             )
         case s if s in list_languages_commands:
-            print(
-                "OUTPUT: " + str(get_available_languages(language_list_path))
-            )
+            print("OUTPUT: " + str(get_available_languages(language_list_path)))
         case s if s in list_languages_anglicized_commands:
             print(
-                "OUTPUT: " + str(
-                    get_available_languages_anglicized(language_list_path)
-                )
+                "OUTPUT: " + str(get_available_languages_anglicized(language_list_path))
             )
         case s if s in is_supported_language_commands:
-            print(
-                "OUTPUT: " + str(
-                    is_supported_language(language_list_path, language)
-                )
-            )
+            print("OUTPUT: " + str(is_supported_language(language_list_path, language)))
         case "help":
             help_handler()
         case _:
             raise ValueError(
-                f"FATAL: Could not determine desired task: \"{selection}\". " +
-                "(Did you spell it correctly and is it a valid command?) " +
+                f'FATAL: Could not determine desired task: "{selection}". '
+                "(Did you spell it correctly and is it a valid command?) "
                 "Please recheck this input or use help for more information"
             )
+
 
 main()
