@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+set -e 
+
 # Initalize "global" variables
 PERM_DIR='lib'
 TEMP_DIR='temp-build-script-dir'
