@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 # Initalize "global" variables
 PERM_DIR='lib'
 TEMP_DIR='temp-build-script-dir'
@@ -17,10 +19,3 @@ else
 fi
 
 rm -rf "$TEMP_DIR"
-
-# Removes the Translation Library Docs Repository's LICENSE and README.md
-# These files are either redundant or not needed in the prefix location
-if [ -e "$PERM_DIR/LICENSE" ] && [ -e "$PERM_DIR/README.md" ]; then
-    rm "$PERM_DIR/LICENSE"
-    rm "$PERM_DIR/README.md"
-fi
