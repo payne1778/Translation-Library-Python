@@ -5,10 +5,10 @@ from translation_library.utils.path_utils import (
     get_language_file_path,
     get_languages_file_path,
 )
-from translation_library.utils.toml_utils import serialize_toml
+from translation_library.utils.toml_utils import serialize_toml_dict
 
 
-def language_toml(language: str) -> dict:
+def language_toml_dict(language: str) -> dict:
     """
     _Returns a toml dictionary of a specified language_
 
@@ -18,10 +18,10 @@ def language_toml(language: str) -> dict:
     Returns:
         dict: _the language file as a toml dictonary_
     """
-    return serialize_toml(get_language_file_path(language))
+    return serialize_toml_dict(get_language_file_path(language))
 
 
-def languages_toml() -> dict:
+def languages_toml_dict() -> dict:
     """
     _Returns a toml dictionary of all of the translation library's supported
     languages_
@@ -29,7 +29,7 @@ def languages_toml() -> dict:
     Returns:
         dict: _toml dict of supported languages_
     """
-    return serialize_toml(get_languages_file_path())
+    return serialize_toml_dict(get_languages_file_path())
 
 
 def get_languages() -> list[str]:
@@ -39,7 +39,7 @@ def get_languages() -> list[str]:
 
     :return: A list of all of the supported languages with local spelling
     """
-    return [language for language in languages_toml().values()]
+    return [language for language in languages_toml_dict().values()]
 
 
 def get_languages_anglicized() -> list[str]:
@@ -50,7 +50,7 @@ def get_languages_anglicized() -> list[str]:
 
     :return: A list of all of the supported languages with anglicized spelling
     """
-    return [language for language in languages_toml()]
+    return [language for language in languages_toml_dict()]
 
 
 def is_supported_language(language: str) -> bool:
@@ -66,7 +66,7 @@ def is_supported_language(language: str) -> bool:
 
 
 def into_language_pretty_str(language: str) -> str:
-    return tomlkit.dumps(language_toml(language))
+    return tomlkit.dumps(language_toml_dict(language))
 
 
 def print_pretty_language_str(language: str) -> None:

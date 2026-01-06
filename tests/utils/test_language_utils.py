@@ -2,17 +2,17 @@ from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
     is_supported_language,
-    language_toml,
-    languages_toml,
+    language_toml_dict,
+    languages_toml_dict,
 )
 
 
 def test_language_toml() -> None:
-    assert isinstance(language_toml("english"), dict)
+    assert isinstance(language_toml_dict("english"), dict)
 
 
 def test_languages_toml() -> None:
-    assert isinstance(languages_toml(), dict)
+    assert isinstance(languages_toml_dict(), dict)
 
 
 def test_get_languages() -> None:

@@ -6,7 +6,7 @@ import dpath.util
 import tomlkit
 
 
-def serialize_toml(toml_file_path: str | Path) -> dict:
+def serialize_toml_dict(toml_file_path: str | Path) -> dict:
     # """
     # Return a toml file as a dictionary of key-value pairs from a specified
     # directory path.
@@ -20,7 +20,7 @@ def serialize_toml(toml_file_path: str | Path) -> dict:
         return tomlkit.load(f)
 
 
-def deserialize_toml(toml_data: dict, toml_file_path: str | Path) -> None:
+def deserialize_toml_dict(toml_data: dict, toml_file_path: str | Path) -> None:
     if not exists(toml_file_path):
         raise ValueError(f"'{toml_file_path}' does not exist")
     with open(toml_file_path, "w") as f:
@@ -30,14 +30,14 @@ def deserialize_toml(toml_data: dict, toml_file_path: str | Path) -> None:
 def update_keys(toml_file_path: str | Path, key: str, new_value: Any) -> None:
     if not exists(toml_file_path):
         raise ValueError(f"'{toml_file_path}' does not exist")
-    toml_data: dict = serialize_toml(toml_file_path)
+    toml_data: dict = serialize_toml_dict(toml_file_path)
     dpath.util.set(toml_data, f"**/{key}", new_value)
-    deserialize_toml(toml_data, toml_file_path)
+    deserialize_toml_dict(toml_data, toml_file_path)
 
 
 def update_value(toml_file_path: str | Path, key_path: str, new_value: Any) -> None:
     if not exists(toml_file_path):
         raise ValueError(f"'{toml_file_path}' does not exist")
-    toml_data: dict = serialize_toml(toml_file_path)
+    toml_data: dict = serialize_toml_dict(toml_file_path)
     dpath.util.set(toml_data, key_path, new_value)
-    deserialize_toml(toml_data, toml_file_path)
+    deserialize_toml_dict(toml_data, toml_file_path)

@@ -1,15 +1,18 @@
 import os
 import sys
-import typing
 from pathlib import Path
-
-import tomllib
 
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
     is_supported_language,
 )
+from translation_library.utils.path_utils import (
+    get_language_file_path,
+    get_languages_file_path,
+    get_project_root,
+)
+from translation_library.utils.toml_utils import serialize_toml_dict
 
 
 def populate_translation_vars(
@@ -80,7 +83,7 @@ def print_translated_message(
     """
     try:
         message_string = ""
-        toml_dict = get_toml_dict(toml_path)
+        toml_dict = serialize_toml_dict(toml_path)
 
         if not section and not variable_args:
             message_string = toml_dict[variable]
@@ -158,19 +161,6 @@ def print_translated_message_handler(
             raise SystemError("FATAL: Translation files could not be loaded")
 
 
-def are_valid_paths(*paths: str) -> list[bool] and bool:
-    """
-    Checks to see if each of the given paths are valid/exist.
-
-    :param paths: The path strings that are to be checked
-    :return: `paths_tested`, a list of booleans that corresponds to each path
-    given and the status of whether it was valid or not
-    :return: A boolean for whether any of the paths given were invalid
-    """
-    paths_tested = [os.path.exists(path) for path in paths]
-    return paths_tested, not any(False for path in paths_tested)
-
-
 def help_handler():
     """
     Reads from this file's associated README. Replaces/removes markdown syntax
@@ -218,9 +208,9 @@ def main():
         language = args[2].lower()
 
     # Create paths for various TOML files and the project's base directory
-    base_directory = str(Path(__file__).resolve().parents[2])
-    language_list_path = os.path.join(base_directory, "lib", "languages.toml")
-    default_language_path = os.path.join(base_directory, "lib", "english.toml")
+    base_directory = get_project_root()
+    language_list_path = get_languages_file_path()
+    default_language_path = get_language_file_path("english")
 
     # Use preferred language file if found, otherwise use default language file
     preferred_language_path = (
