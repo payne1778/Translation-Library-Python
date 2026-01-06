@@ -1,5 +1,3 @@
-import pytest
-
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
