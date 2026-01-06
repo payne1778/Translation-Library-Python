@@ -1,4 +1,10 @@
-from translation_library.utils.path_utils import get_languages_file_path
+import dpath
+import tomlkit
+
+from translation_library.utils.path_utils import (
+    get_language_file_path,
+    get_languages_file_path,
+)
 from translation_library.utils.toml_utils import serialize_toml
 
 
@@ -12,7 +18,7 @@ def language_toml(language: str) -> dict:
     Returns:
         dict: _the language file as a toml dictonary_
     """
-    return serialize_toml(get_languages_file_path())
+    return serialize_toml(get_language_file_path(language))
 
 
 def languages_toml() -> dict:
@@ -57,3 +63,15 @@ def is_supported_language(language: str) -> bool:
     return get_languages_anglicized().__contains__(
         language.lower()
     ) or get_languages().__contains__(language.lower())
+
+
+def into_language_pretty_str(language: str) -> str:
+    return tomlkit.dumps(language_toml(language))
+
+
+def print_pretty_language_str(language: str) -> None:
+    print(into_language_pretty_str(language))
+
+
+# def get_values_from_key(language: str, key: str) -> None:
+#     print(dpath.get(language_toml(language), f"**/{key}"))
