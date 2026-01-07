@@ -7,6 +7,7 @@ from translation_library.utils.language_utils import (
     local_get_language_file_path,
     print_toml_dict,
 )
+from translation_library.utils.path_utils import valid_path_validator
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     # print(get_languages_anglicized())
     # print_toml_dict("english")
 
-    print(local_get_language_file_path("en"))
-    print(local_get_language_file_path("de"))
+    valid_path_validator(local_get_language_file_path("en"))
+    valid_path_validator(local_get_language_file_path("de"))
 
     logger.debug("Ending session")
