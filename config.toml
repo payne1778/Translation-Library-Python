@@ -1,0 +1,12 @@
+[paths]
+i18n_dir = "resources/i18n"
+
+[languages.en]
+english_name = "English"
+native_name = "English"
+file = "english.toml"
+
+[languages.de]
+english_name = "German"
+native_name = "Deutsch"
+file = "german.toml"

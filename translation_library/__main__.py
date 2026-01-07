@@ -4,7 +4,8 @@ from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
     get_value_from_language_toml,
-    print_language_toml_dict,
+    local_get_language_file_path,
+    print_toml_dict,
 )
 
 logger = logging.getLogger(__name__)
@@ -32,9 +33,12 @@ if __name__ == "__main__":
 
     logger.debug("Starting session")
 
-    print(get_value_from_language_toml("german", "start.welcome"))
-    print(get_languages())
-    print(get_languages_anglicized())
-    print_language_toml_dict("english")
+    # print(get_value_from_language_toml("german", "start.welcome"))
+    # print(get_languages())
+    # print(get_languages_anglicized())
+    # print_toml_dict("english")
+
+    print(local_get_language_file_path("en"))
+    print(local_get_language_file_path("de"))
 
     logger.debug("Ending session")
