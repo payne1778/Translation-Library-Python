@@ -101,7 +101,7 @@ def deserialize_toml_dict(
 def get_value_from_key(
     toml_file_path: Annotated[str | Path, BeforeValidator(valid_toml_path_validator)],
     key_path: str = Field(..., min_length=1),
-) -> object:
+) -> str | list[object] | list[dict[str, object]]:
     """
     Get the value of a specific key from a given TOML file path.
 
@@ -130,7 +130,7 @@ def get_value_from_key(
         logging.warning(
             "None value retrieved with key '%s' from '%s", key_path, toml_file_path
         )
-        return None
+        return ""
     except PathAccessError as pae:
         logger.exception("Key '%s' does not exist in %s", key_path, toml_file_path)
         raise pae
