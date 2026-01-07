@@ -1,3 +1,7 @@
+from tests.utils.constants.values import (
+    EXAMPLE_SUPPORTED_LANGUAGE,
+    EXAMPLE_UNSUPPORTED_LANGUAGE,
+)
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
@@ -5,10 +9,6 @@ from translation_library.utils.language_utils import (
     language_toml_dict,
     languages_toml_dict,
 )
-
-EXAMPLE_UNSUPPORTED_LANGUAGE = "warlpiri"
-
-EXAMPLE_SUPPORTED_LANGUAGE = "english"
 
 
 def test_language_toml() -> None:

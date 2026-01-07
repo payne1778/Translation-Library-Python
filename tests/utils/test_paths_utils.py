@@ -2,20 +2,17 @@ from pathlib import Path
 
 import pytest
 
+from tests.utils.constants.values import (
+    EXAMPLE_ENGLISH_TOML_PATH,
+    EXAMPLE_SUPPORTED_LANGUAGE,
+    EXAMPLE_UNSUPPORTED_LANGUAGE,
+)
 from translation_library.utils.path_utils import (
     get_language_file_path,
     get_languages_file_path,
     get_project_root,
     valid_path_validator,
 )
-
-PARENT_DIR_PATH = Path(__file__).resolve().parent
-
-EXAMPLE_ENGLISH_TOML_PATH: Path = PARENT_DIR_PATH / "example_english.toml"
-
-EXAMPLE_UNSUPPORTED_LANGUAGE = "warlpiri"
-
-EXAMPLE_SUPPORTED_LANGUAGE = "english"
 
 
 def test_valid_path_validator() -> None:
