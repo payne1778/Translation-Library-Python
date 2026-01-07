@@ -6,9 +6,13 @@ from translation_library.utils.language_utils import (
     languages_toml_dict,
 )
 
+EXAMPLE_UNSUPPORTED_LANGUAGE = "warlpiri"
+
+EXAMPLE_SUPPORTED_LANGUAGE = "english"
+
 
 def test_language_toml() -> None:
-    assert isinstance(language_toml_dict("english"), dict)
+    assert isinstance(language_toml_dict(EXAMPLE_SUPPORTED_LANGUAGE), dict)
 
 
 def test_languages_toml() -> None:
@@ -16,16 +20,20 @@ def test_languages_toml() -> None:
 
 
 def test_get_languages() -> None:
-    assert "English" in get_languages()
+    assert EXAMPLE_SUPPORTED_LANGUAGE in [
+        language.lower() for language in get_languages()
+    ]
 
 
 def test_get_languages_anglicized() -> None:
-    assert "english" in get_languages_anglicized()
+    assert EXAMPLE_SUPPORTED_LANGUAGE in [
+        language.lower() for language in get_languages_anglicized()
+    ]
 
 
 def test_is_supported_language() -> None:
-    assert is_supported_language("english")
+    assert is_supported_language(EXAMPLE_SUPPORTED_LANGUAGE)
 
 
 def test_is_supported_language_fail() -> None:
-    assert not is_supported_language("warlpiri")
+    assert not is_supported_language(EXAMPLE_UNSUPPORTED_LANGUAGE)
