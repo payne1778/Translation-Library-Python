@@ -12,6 +12,7 @@ from translation_library.utils.toml_utils import serialize_toml_dict
 
 @validate_call
 def language_toml_dict(language: Annotated[str, Field(min_length=1)]) -> dict:
+    # TODO: fix docstring comment
     """
     Returns a TOML-like dictionary of a specified language
 
@@ -58,6 +59,7 @@ def get_languages_anglicized() -> list[str]:
 
 @validate_call
 def is_supported_language(language: Annotated[str, Field(min_length=1)]) -> bool:
+    # TODO: fix docstring comment
     """
     Checks to see if a given language is supported.
 
@@ -71,13 +73,11 @@ def is_supported_language(language: Annotated[str, Field(min_length=1)]) -> bool
 
 @validate_call
 def into_language_toml_str(language: Annotated[str, Field(min_length=1)]) -> str:
+    # TODO: docstring comment
     return tomlkit.dumps(language_toml_dict(language))
 
 
 @validate_call
 def print_language_toml_dict(language: Annotated[str, Field(min_length=1)]) -> None:
+    # TODO: docstring comment
     print(into_language_toml_str(language))
-
-
-# def get_values_from_key(language: str, key: str) -> None:
-#     print(dpath.get(language_toml(language), f"**/{key}"))
