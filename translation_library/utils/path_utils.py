@@ -1,26 +1,47 @@
 from os import walk
 from os.path import exists
 from pathlib import Path
-from typing import Iterator, List, Tuple
+from typing import Annotated, Iterator, List, Tuple
 
-type Walker = Iterator[Tuple[str, List[str], List[str]]]
-
-
-def raise_for_nonexistance(file_path: str | Path) -> None:
-    """
-    Raises `FileNotFoundError` if the path from arg `file_path` does not exist
-
-    Args:
-        file_path (str | Path): the path of whose existance to check
-
-    Raises:
-        FileNotFoundError: if the path could not be located or does not exist
-    """
-    if not exists(file_path):
-        raise FileNotFoundError(f"'{file_path}' could not be located/does not exist")
+from pydantic import Field, validate_call
 
 
-def get_project_root(anchor=".git") -> Path:
+def valid_path_validator(v: str | Path) -> Path:
+    if isinstance(v, str):
+        if not v.strip():
+            raise ValueError("file path cannot be None/null")
+        elif not exists(Path(v)):
+            raise FileNotFoundError(f"path '{v}' could not be located/does not exist")
+        return Path(v)
+
+    if isinstance(v, Path):
+        if v.as_posix().strip() is None:
+            raise ValueError("file path cannot be None/null")
+        elif not exists(v):
+            raise FileNotFoundError(f"path '{v}' could not be located/does not exist")
+        return v
+
+    raise TypeError("file path must be of type str or Path")
+
+
+# def raise_for_nonexistance(file_path: str | Path) -> None:
+#     """
+#     Raises `FileNotFoundError` if the path from arg `file_path` does not exist
+
+#     Args:
+#         file_path (str | Path): the path of whose existance to check
+
+#     Raises:
+#         FileNotFoundError: if the path could not be located or does not exist
+#     """
+#     if not exists(file_path):
+#         raise FileNotFoundError(f"'{file_path}' could not be located/does not exist")
+
+
+@validate_call
+def get_project_root(
+    anchor: str = Field(default=".git", min_length=1),
+) -> Path:
     """
     Find and return the path of the root path of the project.
 
@@ -42,7 +63,8 @@ def get_project_root(anchor=".git") -> Path:
     )
 
 
-def get_language_file_path(language: str) -> Path:
+@validate_call
+def get_language_file_path(language: Annotated[str, Field(min_length=1)]) -> Path:
     """
     Get the path of the TOML file for a specified language name.
 
@@ -55,6 +77,7 @@ def get_language_file_path(language: str) -> Path:
     Returns:
         Path: the absoulte path of the specified language's TOML file
     """
+    type Walker = Iterator[Tuple[str, List[str], List[str]]]
     walker: Walker = walk(get_project_root() / "lib")
     for dir_path, _, file_names in walker:
         for file_name in file_names:
