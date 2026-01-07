@@ -5,10 +5,10 @@ from pathlib import Path
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
-    is_supported_language,
+    is_supported,
 )
 from translation_library.utils.path_utils import (
-    get_language_file_path,
+    get_file_path_in_root,
     get_languages_file_path,
     get_project_root,
 )
@@ -210,7 +210,7 @@ def main():
     # Create paths for various TOML files and the project's base directory
     base_directory = get_project_root()
     language_list_path = get_languages_file_path()
-    default_language_path = get_language_file_path("english")
+    default_language_path = get_file_path_in_root("english")
 
     # Use preferred language file if found, otherwise use default language file
     preferred_language_path = (
@@ -251,7 +251,7 @@ def main():
         )
 
     # Ensure that the desired language is supported
-    if translation_mode and not is_supported_language(language_list_path, language):
+    if translation_mode and not is_supported(language_list_path, language):
         raise NotImplementedError(
             f'FATAL: The language "{language}" is not supported. '
             "Corroborate your spelling with the relevant TOML file/entry."
@@ -271,7 +271,7 @@ def main():
         case s if s in list_languages_anglicized_commands:
             print("OUTPUT: " + str(get_languages_anglicized(language_list_path)))
         case s if s in is_supported_language_commands:
-            print("OUTPUT: " + str(is_supported_language(language_list_path, language)))
+            print("OUTPUT: " + str(is_supported(language_list_path, language)))
         case "help":
             help_handler()
         case _:

@@ -5,18 +5,18 @@ from tests.utils.constants.values import (
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_anglicized,
-    is_supported_language,
-    language_toml_dict,
-    languages_toml_dict,
+    get_languages_toml_dict,
+    into_toml_dict,
+    is_supported,
 )
 
 
 def test_language_toml() -> None:
-    assert isinstance(language_toml_dict(EXAMPLE_SUPPORTED_LANGUAGE), dict)
+    assert isinstance(into_toml_dict(EXAMPLE_SUPPORTED_LANGUAGE), dict)
 
 
 def test_languages_toml() -> None:
-    assert isinstance(languages_toml_dict(), dict)
+    assert isinstance(get_languages_toml_dict(), dict)
 
 
 def test_get_languages() -> None:
@@ -28,8 +28,8 @@ def test_get_languages_anglicized() -> None:
 
 
 def test_is_supported_language() -> None:
-    assert is_supported_language(EXAMPLE_SUPPORTED_LANGUAGE)
+    assert is_supported(EXAMPLE_SUPPORTED_LANGUAGE)
 
 
 def test_is_supported_language_fail() -> None:
-    assert not is_supported_language(EXAMPLE_UNSUPPORTED_LANGUAGE)
+    assert not is_supported(EXAMPLE_UNSUPPORTED_LANGUAGE)
