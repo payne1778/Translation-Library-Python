@@ -1,5 +1,5 @@
 from translation_library.utils.language_utils import language_toml_dict
-from translation_library.utils.toml_utils import serialize_toml_dict
+from translation_library.utils.toml_utils import get_value_from_key
 
 if __name__ == "__main__":
     # variable: str = "hello"
@@ -21,4 +21,4 @@ if __name__ == "__main__":
     # print("TRANSLATION: " + message_string)
     # get_values_from_key("english", "hello")
 
-    print(language_toml_dict("english"))
+    print(get_value_from_key("english", "description"))
