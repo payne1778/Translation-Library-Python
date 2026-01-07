@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 def valid_path_validator(v: str | Path) -> Path:
-    """_summary_
+    """
+    Checks to see if a given path exists and whether it is of type `str`
+    or `Path`.
 
     Args:
         v (str | Path): a supposed `str`/`Path` path to a file
