@@ -1,4 +1,14 @@
-from translation_library.utils.language_utils import get_value_from_language_toml
+import logging
+
+from translation_library.utils.language_utils import (
+    get_languages,
+    get_languages_anglicized,
+    get_value_from_language_toml,
+    print_language_toml_dict,
+)
+
+logger = logging.getLogger(__name__)
+
 
 if __name__ == "__main__":
     # variable: str = "hello"
@@ -20,4 +30,11 @@ if __name__ == "__main__":
     # print("TRANSLATION: " + message_string)
     # get_values_from_key("english", "hello")
 
-    print(get_value_from_language_toml("german", "description"))
+    logger.debug("Starting session")
+
+    print(get_value_from_language_toml("german", "start.welcome"))
+    print(get_languages())
+    print(get_languages_anglicized())
+    print_language_toml_dict("english")
+
+    logger.debug("Ending session")

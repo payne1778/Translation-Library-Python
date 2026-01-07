@@ -1,3 +1,5 @@
+import logging
+
 import tomlkit
 from pydantic import Field, validate_call
 
@@ -6,6 +8,8 @@ from translation_library.utils.path_utils import (
     get_languages_file_path,
 )
 from translation_library.utils.toml_utils import get_value_from_key, serialize_toml_dict
+
+logger = logging.getLogger(__name__)
 
 
 @validate_call
@@ -17,9 +21,14 @@ def language_toml_dict(language: str = Field(..., min_length=1)) -> dict:
         language (str): the language to convert into a TOML-like dict
 
     Returns:
-        dict: the language file as a TOML-like dict
+        dict: the language file as a TOML-like dict or {} if file was empty
     """
-    return serialize_toml_dict(get_language_file_path(language))
+    logger.debug("Attempting to retrieve TOML dict from '%s.toml'", language)
+    if toml_dict := serialize_toml_dict(get_language_file_path(language)):
+        logger.info("Successfuly retrieved toml dict from '%s.toml'", language)
+        return toml_dict
+    logger.warning("None dict retrieved from '%s.toml'", language)
+    return {}
 
 
 def languages_toml_dict() -> dict:
@@ -30,9 +39,15 @@ def languages_toml_dict() -> dict:
     >>> {"english": "English, "german": "Deutsch"}
 
     Returns:
-        dict: TOML-like dict of supported languages
+        dict: TOML-like dict of supported languages or {} if file was empty
     """
+    logger.debug("Attempting to retrieve TOML dict from 'languages.toml'")
     return serialize_toml_dict(get_languages_file_path())
+    if toml_dict := serialize_toml_dict(get_languages_file_path()):
+        logger.info("Successfuly retrieved toml dict from 'languages.toml'")
+        return toml_dict
+    logger.warning("None dict retrieved from 'languages.toml'")
+    return {}
 
 
 def get_languages() -> list[str]:
@@ -45,6 +60,7 @@ def get_languages() -> list[str]:
     Returns:
         list[str]: list of all supported languages with their native spelling
     """
+    logger.debug("Attempting to retrieve list of supported languages")
     return [language for language in languages_toml_dict().values()]
 
 
@@ -59,6 +75,7 @@ def get_languages_anglicized() -> list[str]:
     Returns:
         list[str]: list of all supported languages with their anglicized spelling
     """
+    logger.debug("Attempting to retrieve list of supported languages anglicized")
     return [language for language in languages_toml_dict()]
 
 
@@ -73,20 +90,37 @@ def is_supported_language(language: str = Field(..., min_length=1)) -> bool:
     Returns:
         bool: `True` if the language is supported, `False` otherwise
     """
-    return get_languages_anglicized().__contains__(
-        language.lower()
-    ) or get_languages().__contains__(language.lower())
+    supported: bool = language.lower() in [
+        l.lower() for l in get_languages_anglicized()
+    ] or language.lower() in [l.lower() for l in get_languages()]
+
+    logger.debug("'%s' is supported? '%s'", language, str(supported))
+    return supported
 
 
 @validate_call
 def into_language_toml_str(language: str = Field(..., min_length=1)) -> str:
     """
-    Return the TOML language file of a specified language as a str.
+    Return the TOML language file of a specified language as a TOML-based
+    pretty str.
 
     Args:
         language (str): the name of the language TOML dict to convert into a str
     """
-    return tomlkit.dumps(language_toml_dict(language))
+    if not is_supported_language(language):
+        logger.error(
+            "is_supported_language() returned False for language arg '%s'", language
+        )
+        raise ValueError(f"{language} is not supported")
+
+    logger.debug("Converting '%s.toml' as a dictionary into str")
+    if toml_str := tomlkit.dumps(language_toml_dict(language)):
+        logger.info("Successfully converted the '%s' TOML dict into str")
+        return toml_str
+    logger.warning(
+        "tomlkit dumped None from language_toml_dict() with arg '%s'", language
+    )
+    return ""
 
 
 @validate_call
@@ -115,4 +149,16 @@ def get_value_from_language_toml(
     Returns:
         object: the value of a given key
     """
-    return get_value_from_key(get_language_file_path(language), key_path)
+    logger.debug("Getting '%s' from the '%s' TOML file" % (key_path, language))
+    if value := get_value_from_key(get_language_file_path(language), key_path):
+        logger.info(
+            "Successfuly retrieved value '%s' with key '%s' from '%s.toml'",
+            value,
+            key_path,
+            language,
+        )
+        return value
+    logger.warning(
+        "None value retrieved with key '%s' from '%s.toml'", key_path, language
+    )
+    return None

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import Annotated
 
@@ -9,6 +10,8 @@ from tomlkit.exceptions import EmptyKeyError, EmptyTableNameError
 
 from translation_library.utils.path_utils import valid_path_validator
 
+logger = logging.getLogger(__name__)
+
 
 def valid_toml_path_validator(v: str | Path) -> Path:
     """
@@ -19,18 +22,17 @@ def valid_toml_path_validator(v: str | Path) -> Path:
         v (str | Path): a supposed `str`/`Path` path to a TOML file
 
     Raises:
-        ValueError: if a `str` was given and it does not end in ".toml"
-        ValueError: if a `Path` was given and it does not end in ".toml"
+        ValueError: if a `str`/`Path` was given and it does not end in ".toml"
 
     Returns:
         Path: the original path if it exists, otherwise, valid_path_validator() will raise errors
     """
     if isinstance(v, str) and not v.endswith(".toml"):
-        # TODO: log this
+        logger.error("arg '%s' did not end in .toml", v)
         raise ValueError("TOML file path must end in .toml")
 
     if isinstance(v, Path) and v.suffix != ".toml":
-        # TODO: log this
+        logger.error("arg '%s' did not end in .toml", v)
         raise ValueError("TOML file path must end in .toml")
 
     return valid_path_validator(v)
@@ -55,14 +57,17 @@ def serialize_toml_dict(
     """
     try:
         with open(toml_file_path, "rb") as f:
-            return tomlkit.load(f)
-    except (EmptyKeyError, EmptyTableNameError) as e:
-        # TODO: log this
-        # if TOML file has invalid syntax
-        raise
+            if toml_data := tomlkit.load(f):
+                logger.debug("TOML successfully serialized from '%s'", toml_file_path)
+                return toml_data
+            logging.warning("None value serialized from '%s", toml_file_path)
+            return {}
+    except (EmptyKeyError, EmptyTableNameError) as ee:
+        logger.exception("TOML file '%s' has invalid syntax", toml_file_path)
+        raise ee
     except Exception as e:
-        # TODO: log this
-        raise RuntimeError(f"Could not serialize '{toml_file_path}' due to: {e}")
+        logger.exception("Could not serialize '%s' due to: ", toml_file_path)
+        raise e
 
 
 @validate_call
@@ -82,16 +87,14 @@ def deserialize_toml_dict(
     """
     try:
         with open(toml_file_path, "w") as f:
-            return tomlkit.dump(toml_data, f)
-    except (EmptyKeyError, EmptyTableNameError) as e:
-        # TODO: log this
-        # if TOML file has invalid syntax
-        raise
+            tomlkit.dump(toml_data, f)
+            logger.debug("Successfully deserialized TOML data to '%s'", toml_file_path)
+    except (EmptyKeyError, EmptyTableNameError) as ee:
+        logger.exception("TOML file '%s' has invalid syntax", toml_file_path)
+        raise ee
     except Exception as e:
-        # TODO: log this
-        raise RuntimeError(
-            f"Could not deserialize to '{toml_file_path}' due to: {e}"
-        ) from e
+        logger.exception("Could not deserialize to '%s' due to: ", toml_file_path)
+        raise e
 
 
 @validate_call
@@ -116,11 +119,25 @@ def get_value_from_key(
     """
     try:
         language_toml_dict: dict = serialize_toml_dict(toml_file_path)
-        return glom(language_toml_dict, key_path)
+        if value := glom(language_toml_dict, key_path):
+            logger.debug(
+                "Successfully retrieved '%s' with key '%s' from '%s",
+                value,
+                key_path,
+                toml_file_path,
+            )
+            return value
+        logging.warning(
+            "None value retrieved with key '%s' from '%s", key_path, toml_file_path
+        )
+        return None
     except PathAccessError as pae:
-        # TODO: log this
-        # if the key does not exist
-        raise
-    except Exception as ex:
-        # TODO: log this
-        raise RuntimeError(f"Could not get value from '{toml_file_path}': {ex}") from ex
+        logger.exception("Key '%s' does not exist in %s", key_path, toml_file_path)
+        raise pae
+    except Exception as e:
+        logger.exception(
+            "Could not get value with key '%s' from '%s' due to:",
+            key_path,
+            toml_file_path,
+        )
+        raise e
