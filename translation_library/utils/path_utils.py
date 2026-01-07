@@ -1,7 +1,7 @@
 from os import walk
 from os.path import exists
 from pathlib import Path
-from typing import Annotated, Iterator, List, Tuple
+from typing import Iterator, List, Tuple
 
 from pydantic import Field, validate_call
 
@@ -48,7 +48,6 @@ def valid_path_validator(v: str | Path) -> Path:
 def get_project_root(
     anchor: str = Field(default=".git", min_length=1),
 ) -> Path:
-    # TODO: fix docstring comment
     """
     Find and return the path of the root path of the project.
 
@@ -73,8 +72,7 @@ def get_project_root(
 
 # TODO: find a way to check if language is supported
 @validate_call
-def get_language_file_path(language: Annotated[str, Field(min_length=1)]) -> Path:
-    # TODO: fix docstring comment
+def get_language_file_path(language: str = Field(min_length=1)) -> Path:
     """
     Get the path of the TOML file for a specified language name.
 
@@ -91,7 +89,7 @@ def get_language_file_path(language: Annotated[str, Field(min_length=1)]) -> Pat
     walker: Walker = walk(get_project_root() / "lib")
     for dir_path, _, file_names in walker:
         for file_name in file_names:
-            if file_name == f"{language.lower()}.toml":
+            if file_name.lower() == f"{language.lower()}.toml":
                 return Path(dir_path) / Path(file_name)
 
     # TODO: log this
@@ -113,4 +111,5 @@ def get_languages_file_path() -> Path:
         # Instead of `english.toml` or `german.toml`, it searches for `languages.toml`
         return get_language_file_path("languages")
     except FileNotFoundError:
+        # TODO: log this
         raise FileNotFoundError("Could not find `languages.toml`")

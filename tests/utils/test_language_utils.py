@@ -20,13 +20,13 @@ def test_languages_toml() -> None:
 
 
 def test_get_languages() -> None:
-    assert EXAMPLE_SUPPORTED_LANGUAGE in [
+    assert EXAMPLE_SUPPORTED_LANGUAGE.lower() in [
         language.lower() for language in get_languages()
     ]
 
 
 def test_get_languages_anglicized() -> None:
-    assert EXAMPLE_SUPPORTED_LANGUAGE in [
+    assert EXAMPLE_SUPPORTED_LANGUAGE.lower() in [
         language.lower() for language in get_languages_anglicized()
     ]
 
