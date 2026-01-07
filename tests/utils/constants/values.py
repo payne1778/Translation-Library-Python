@@ -18,6 +18,7 @@ EXAMPLE_INVALID_TOML_SYNTAX_PATH = PARENT_DIR_PATH / "invalid.toml"
 
 EXAMPLE_ENGLISH_TOML_PATH: Path = PARENT_DIR_PATH / "example.toml"
 
+# Note: there are some hard coded of accessing this specific TOML dict
 EXAMPLE_ENGLISH_TOML_DICT: dict = {
     "setting": "This is the English language file",
     "hello": "Hello {name}",
