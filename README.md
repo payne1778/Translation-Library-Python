@@ -13,11 +13,12 @@
 - Added a `utils` for handy utilities for pathing and interacting with TOML files
 - Added test cases for functions within the pathing, TOML, and language utiliies 
 - Added Pydantic validation for function args
+- Add a logging system
+- Add docstring documentation to functions
+
 
 ### Future Project Goals:
 - Make source code a public package available on PIP
-- Add a logging system
-- Add docstring documentation to functions
 - Use a library to handle sysargs in the CLI
 - Add more validation and error handling with functions
 - Add more test cases for functions
