@@ -128,9 +128,12 @@ def get_value_from_key(
             )
             return value
         logging.warning(
-            "None value retrieved with key '%s' from '%s", key_path, toml_file_path
+            "None retrieved with key '%s' from '%s", key_path, toml_file_path
         )
-        return ""
+        if "*" in key_path:
+            return []
+        else:
+            return ""
     except PathAccessError as pae:
         logger.exception("Key '%s' does not exist in %s", key_path, toml_file_path)
         raise pae
