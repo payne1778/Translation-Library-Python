@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.utils.constants.values import (
+from resources.constants.values import (
     EXAMPLE_ENGLISH_TOML_PATH,
     EXAMPLE_UNSUPPORTED_LANGUAGE,
 )

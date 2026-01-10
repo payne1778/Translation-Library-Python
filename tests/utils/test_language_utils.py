@@ -1,11 +1,11 @@
-from tests.utils.constants.values import (
+from resources.constants.values import (
     EXAMPLE_SUPPORTED_LANGUAGE,
     EXAMPLE_UNSUPPORTED_LANGUAGE,
 )
 from translation_library.utils.language_utils import (
     get_languages,
     get_languages_as_english_names,
-    get_value_from_language_toml,
+    get_value_from_language_toml,  # TODO: test this
     into_toml_dict,
     into_toml_str,
     is_supported,

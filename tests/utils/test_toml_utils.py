@@ -3,7 +3,7 @@ from glom.core import PathAccessError  # type: ignore
 from pydantic_core import ValidationError
 from tomlkit.exceptions import EmptyKeyError, EmptyTableNameError
 
-from tests.utils.constants.values import (
+from resources.constants.values import (
     EXAMPLE_ENGLISH_TOML_DICT,
     EXAMPLE_ENGLISH_TOML_PATH,
     EXAMPLE_INVALID_TOML_SYNTAX_PATH,
