@@ -1,6 +1,6 @@
 # Translation-Library-Python
 
-### TL-PYTHON OPERATIONAL STATUS: *Borked*
+### TL-PYTHON OPERATIONAL STATUS: *Borked, but almost working*
 
 > [!NOTE]
 > I am currently working on a massive overhaul with the TL Python implementation.
@@ -14,16 +14,14 @@
 - Added test cases for functions within the pathing, TOML, and language utiliies 
 - Added Pydantic validation for function args
 - Add a logging system
-- Add docstring documentation to functions
-
+- Add docstring documentation to functions existing
+- Use a library to handle sysargs in the CLI
 
 ### Future Project Goals:
 - Make source code a public package available on PIP
-- Use a library to handle sysargs in the CLI
-- Add more validation and error handling with functions
-- Add more test cases for functions
-- Add a nice way to format placeholder args this time
 - Start using semantic versioning after soon (might be after 1.0.0 😭)
+- Implement, test, and document utility functions for interaction with `config.toml`
+- Add a nice way to format placeholder args for the new CLI (in stark constrast to the old hand-made CLI)
 
 ### Suggestions & Improvements 
 
