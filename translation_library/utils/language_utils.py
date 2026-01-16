@@ -10,6 +10,7 @@ from translation_library.utils.translation_utils import is_supported
 logger = logging.getLogger(__name__)
 
 
+# TODO: make `language` into `language_code`
 @validate_call
 def into_toml_dict(language: str = Field(..., min_length=1)) -> dict[str, object]:
     """
@@ -29,6 +30,7 @@ def into_toml_dict(language: str = Field(..., min_length=1)) -> dict[str, object
     return {}
 
 
+# TODO: make `language` into `language_code`
 @validate_call
 def into_toml_str(language: str = Field(..., min_length=1)) -> str:
     """
@@ -50,6 +52,7 @@ def into_toml_str(language: str = Field(..., min_length=1)) -> str:
     return ""
 
 
+# TODO: make `language` into `language_code`
 @validate_call
 def print_toml_dict(language: str = Field(..., min_length=1)) -> None:
     """
