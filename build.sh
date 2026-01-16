@@ -17,6 +17,8 @@ pip install pytest > /dev/null
 pip install tomlkit > /dev/null
 pip install glom > /dev/null
 pip install pydantic > /dev/null
+pip install typer > /dev/null
+
 
 # 3. Put contents of the docs repo into a new folder named with $DOCS_REPO_NAME
 git subtree add --prefix="$RESOURCES_DIR/" "$DOCS_REPO_URL" "$COMMIT" --squash
