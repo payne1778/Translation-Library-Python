@@ -20,7 +20,7 @@ def get_value_from_config(
 
 
 def get_i18n_dir_path() -> Path:
-    return get_project_root() / Path(str(get_value_from_config("paths.i18n_dir")))
+    return Path(str(get_value_from_config("paths.i18n_dir")))
 
 
 def get_all_english_names() -> list[str]:
