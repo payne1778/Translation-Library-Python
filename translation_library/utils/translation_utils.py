@@ -81,7 +81,7 @@ def get_i18n_obj(
     logger.debug("Getting '%s' from the '%s' TOML file" % (key_path, language))
     if value := get_value_from_key(get_language_file_path(language), key_path):
         logger.info(
-            "Successfuly retrieved '%s' with key '%s' from '%s.toml'",
+            "Successfully retrieved '%s' with key '%s' from '%s.toml'",
             value,
             key_path,
             language,
