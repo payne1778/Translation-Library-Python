@@ -2,27 +2,35 @@ from typing import Annotated, List
 
 import typer  # ignore-errors
 
-app = typer.Typer(no_args_is_help=True, suggest_commands=True)
+from translation_library.utils.translation_utils import (
+    get_i18n_obj,
+    get_languages,
+    get_languages_as_english_names,
+    is_supported,
+)
+
+cli = typer.Typer(no_args_is_help=True, suggest_commands=True)
 
 
-@app.command()
+@cli.command()
 def list(
     language: Annotated[str, typer.Option("--language", "-l")],
     as_english: Annotated[bool, typer.Option("--english", "-e")] = False,
+    to_lowercase: Annotated[bool, typer.Option("--to-lowercase", "-t")] = False,
 ):
     """
     List supported languages in their native or english spelling.
 
     Args:
-        language (Annotated[str, typer.Option): must have
-        as_english (Annotated[bool, typer.Option): not required
+        language (str): must have
+        as_english (Optional[bool]): not required
     """
-    print(f"list {language}")
-    print(f"list {as_english}")
+    if as_english:
+        print(get_languages_as_english_names(lowercase=to_lowercase))
+    print(get_languages(lowercase=to_lowercase))
 
 
-# why does this not work?
-@app.command()
+@cli.command()
 def translate(
     language: Annotated[str, typer.Option("--language", "-l")],
     key_path: Annotated[str, typer.Option("--key-path", "-k")],
@@ -36,13 +44,12 @@ def translate(
         key_path (Annotated[str, typer.Option): _description_
         args (Annotated[dict, typer.Option): _description_
     """
-    print(f"translate {language}")
-    print(f"translate {key_path}")
+    before_translation: str = str(get_i18n_obj(language.lower(), key_path))
     for arg in args:
         print(f"Processing file: {arg}")
 
 
-@app.command()
+@cli.command()
 def supported(
     language: Annotated[str, typer.Option("--language", "-l")],
 ):
@@ -52,11 +59,11 @@ def supported(
     Args:
         language (Annotated[str, typer.Option): _description_
     """
-    print(f"supported {language}")
+    print(is_supported(language.lower()))
 
 
-@app.command()
-def get_value(
+@cli.command()
+def i18n_print(
     language: Annotated[str, typer.Option("--language", "-l")],
     key_path: Annotated[str, typer.Option("--key-path", "-k")],
 ):
@@ -67,9 +74,4 @@ def get_value(
         language (Annotated[str, typer.Option): _description_
         key_path (Annotated[str, typer.Option): _description_
     """
-    print(f"get_value {language}")
-    print(f"get_value {key_path}")
-
-
-if __name__ == "__main__":
-    app()
+    print(get_i18n_obj(language.lower(), key_path))
