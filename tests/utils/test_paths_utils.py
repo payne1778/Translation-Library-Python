@@ -18,12 +18,12 @@ def test_valid_path_validator_empty_str_fail() -> None:
         valid_path_validator("")
 
 
-def test_valid_path_validator_nonexistant_str_path_fail() -> None:
+def test_valid_path_validator_nonexistent_str_path_fail() -> None:
     with pytest.raises(FileNotFoundError):
         valid_path_validator(f"{EXAMPLE_UNSUPPORTED_LANGUAGE}.toml")
 
 
-def test_valid_path_validator_nonexistant_path_fail() -> None:
+def test_valid_path_validator_nonexistent_path_fail() -> None:
     with pytest.raises(FileNotFoundError):
         valid_path_validator(Path(f"{EXAMPLE_UNSUPPORTED_LANGUAGE}.toml"))
 
