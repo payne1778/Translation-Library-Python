@@ -13,7 +13,9 @@ def get_config_file_path() -> Path:
     return get_project_root() / "config.toml"
 
 
-def get_value_from_config(key_path: str) -> str | list[str] | list[dict[str, object]]:
+def get_value_from_config(
+    key_path: str,
+) -> str | list[str] | list[dict[str, object]]:
     return get_value_from_key(get_config_file_path(), key_path)
 
 
@@ -22,11 +24,19 @@ def get_i18n_dir_path() -> Path:
 
 
 def get_all_english_names() -> list[str]:
-    return list(get_value_from_config(f"languages.*.english_name"))
+    return [str(name) for name in get_value_from_config("languages.*.english_name")]
 
 
 def get_all_native_names() -> list[str]:
-    return list(get_value_from_config(f"languages.*.native_name"))
+    return [str(name) for name in get_value_from_config("languages.*.native_name")]
+
+
+def get_all_file_names() -> list[str]:
+    return [str(name) for name in get_value_from_config("languages.*.file")]
+
+
+def get_all_language_codes() -> list[str]:
+    return [code for code in get_value_from_config("languages").keys()]
 
 
 def language_code_to_english_name(code: str) -> str:
@@ -37,20 +47,8 @@ def language_code_to_native_name(code: str) -> str:
     return str(get_value_from_config(f"languages.{code.lower()}.native_name"))
 
 
-# TODO: make this return language code
-def native_name_to_language_code(name: str) -> str:
-    for language in get_value_from_config(f"languages.*"):
-        if name.lower() == language["native_name"].lower():
-            return language["native_name"]
-    raise ValueError(f"native name '{name}' was not in config file")
-
-
-# TODO: make this return language code
-def english_name_to_language_code(name: str) -> str:
-    for language in get_value_from_config(f"languages.*"):
-        if name.lower() == language["english_name"].lower():
-            return language["english_name"]
-    raise ValueError(f"english name '{name}' was not in config file")
+def language_code_to_file_name(code: str) -> str:
+    return str(get_value_from_config(f"languages.{code.lower()}.file"))
 
 
 def get_language_file_path(code: str) -> Path:
