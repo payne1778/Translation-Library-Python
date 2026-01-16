@@ -1,7 +1,6 @@
 import logging
 
 from translation_library.cli.new_cli import cli
-from translation_library.utils.config_utils import *
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +24,6 @@ if __name__ == "__main__":
 
     # print("TRANSLATION: " + message_string)
     # get_values_from_key("english", "hello")
-
-    print(native_name_to_language_code("English"))
-    print(english_name_to_language_code("English"))
 
     cli()
 

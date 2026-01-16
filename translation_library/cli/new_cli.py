@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List  # pyright: ignore[reportDeprecated]
 
 import typer  # ignore-errors
 
@@ -14,7 +14,6 @@ cli = typer.Typer(no_args_is_help=True, suggest_commands=True)
 
 @cli.command()
 def list(
-    language: Annotated[str, typer.Option("--language", "-l")],
     as_english: Annotated[bool, typer.Option("--english", "-e")] = False,
     to_lowercase: Annotated[bool, typer.Option("--to-lowercase", "-t")] = False,
 ):

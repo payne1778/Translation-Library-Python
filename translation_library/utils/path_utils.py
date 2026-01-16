@@ -18,7 +18,6 @@ def valid_path_validator(v: str | Path) -> Path:
     Raises:
         ValueError: if a `str`/`Path` path was given and is was None/null
         FileNotFoundError: if a `str`/`Path` path was given and it did not exist
-        TypeError: if the arg was not of type `str` or `Path`
 
     Returns:
         Path: the original path if it exists, otherwise errors are raised.
@@ -33,16 +32,10 @@ def valid_path_validator(v: str | Path) -> Path:
         return Path(v)
 
     if isinstance(v, Path):
-        if v.as_posix().strip() is None:
-            logger.error("arg '%s' was None/null", v)
-            raise ValueError("file path cannot be None/null")
-        elif not exists(v):
+        if not exists(v):
             logger.error("arg '%s' could not be located/does not exist", v)
             raise FileNotFoundError(f"path '{v}' could not be located/does not exist")
         return v
-
-    logger.error("arg '%s' was not of type str or Path", v)
-    raise TypeError("file path must be of type str or Path")
 
 
 @validate_call

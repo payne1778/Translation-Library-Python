@@ -41,7 +41,7 @@ def valid_toml_path_validator(v: str | Path) -> Path:
 @validate_call
 def serialize_toml_dict(
     toml_file_path: Annotated[str | Path, BeforeValidator(valid_toml_path_validator)],
-) -> dict:
+) -> dict[str, object]:
     """
     Return a TOML file as a dictionary of key-value pairs from a specified
     directory path.
@@ -72,7 +72,7 @@ def serialize_toml_dict(
 
 @validate_call
 def deserialize_toml_dict(
-    toml_data: Annotated[dict, Field(..., min_length=1)],
+    toml_data: Annotated[dict[str, object], Field(..., min_length=1)],
     toml_file_path: Annotated[str | Path, BeforeValidator(valid_toml_path_validator)],
 ) -> None:
     """
@@ -101,7 +101,7 @@ def deserialize_toml_dict(
 def get_value_from_key(
     toml_file_path: Annotated[str | Path, BeforeValidator(valid_toml_path_validator)],
     key_path: str = Field(..., min_length=1),
-) -> str | list[object] | list[dict[str, object]]:
+) -> str | list[str] | list[dict[str, object]]:
     """
     Get the value of a specific key from a given TOML file path.
 
@@ -118,7 +118,7 @@ def get_value_from_key(
         object: the value associated with the given key path
     """
     try:
-        language_toml_dict: dict = serialize_toml_dict(toml_file_path)
+        language_toml_dict: dict[str, object] = serialize_toml_dict(toml_file_path)
         if value := glom(language_toml_dict, key_path):
             logger.debug(
                 "Successfully retrieved '%s' with key '%s' from '%s",

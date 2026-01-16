@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @validate_call
-def into_toml_dict(language: str = Field(..., min_length=1)) -> dict:
+def into_toml_dict(language: str = Field(..., min_length=1)) -> dict[str, object]:
     """
     Returns a TOML-like dictionary of a specified language.
 
@@ -23,7 +23,7 @@ def into_toml_dict(language: str = Field(..., min_length=1)) -> dict:
     """
     logger.debug("Attempting to retrieve TOML dict from '%s.toml'", language)
     if toml_dict := serialize_toml_dict(get_language_file_path(language)):
-        logger.info("Successfuly retrieved toml dict from '%s.toml'", language)
+        logger.info("Successfully retrieved toml dict from '%s.toml'", language)
         return toml_dict
     logger.warning("None dict retrieved from '%s.toml'", language)
     return {}
