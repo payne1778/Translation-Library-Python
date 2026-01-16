@@ -43,9 +43,16 @@ def translate(
         key_path (Annotated[str, typer.Option): _description_
         args (Annotated[dict, typer.Option): _description_
     """
-    before_translation: str = str(get_i18n_obj(language.lower(), key_path))
-    for arg in args:
-        print(f"Processing file: {arg}")
+    raw_i18n_str: str = str(get_i18n_obj(language.lower(), key_path))
+
+    # Example: "name=Blake", adds {"name": "Blake"} to the dictionary
+    if args:
+        placeholder_args: dict[str, str] = {
+            k: v for k, v in (arg.split("=") for arg in args)
+        }
+        print(raw_i18n_str.format(**placeholder_args))
+    else:
+        print(raw_i18n_str)
 
 
 @cli.command()
