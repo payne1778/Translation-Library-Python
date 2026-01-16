@@ -16,12 +16,12 @@
 - Add a logging system
 - Add docstring documentation to functions existing
 - Use a library to handle sysargs in the CLI
+- Add a nice way to format placeholder args for the new CLI (in stark constrast to the old hand-made CLI)
 
 ### Future Project Goals:
 - Make source code a public package available on PIP
 - Start using semantic versioning after soon (might be after 1.0.0 😭)
 - Implement, test, and document utility functions for interaction with `config.toml`
-- Add a nice way to format placeholder args for the new CLI (in stark constrast to the old hand-made CLI)
 
 ### Suggestions & Improvements 
 
