@@ -1,0 +1,5 @@
+{
+    "reportCallInDefaultInitializer": "none",
+    "reportMissingTypeStubs": "none",
+    "reportUnknownMemberType": "none"
+}
